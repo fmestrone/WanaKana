@@ -26,14 +26,18 @@ wanakana.defaultOptions =
   useObseleteKana: no
   # Special mode for handling input from a text input that is transliterated on the fly.
   IMEMode: off
+  # Convert upper case to katakana and lower case to hiragana if set to false
+  ignoreCase: no
 
 ###*
  * Automatically sets up an input field to be an IME.
 ###
 wanakana.bind = (input) ->
+  input.addEventListener('change', wanakana._onChange)
   input.addEventListener('input', wanakana._onInput)
 
 wanakana.unbind = (input) ->
+  input.removeEventListener('change', wanakana._onChange)
   input.removeEventListener('input', wanakana._onInput)
 
 wanakana._onInput = (event) ->
@@ -41,7 +45,12 @@ wanakana._onInput = (event) ->
   startingCursor = input.selectionStart
   startingLength = input.value.length
   normalizedInputString = wanakana._convertFullwidthCharsToASCII (input.value)
-  newText = (wanakana.toKana(normalizedInputString, {IMEMode: true}))
+  if input.dataset.wanakanaMode == 'katakana'
+    newText = (wanakana._hiraganaToKatakana(wanakana.toKana(normalizedInputString, {IMEMode: on, ignoreCase: on})))
+  else if input.dataset.wanakanaMode == 'hiragana'
+    newText = (wanakana.toKana(normalizedInputString, {IMEMode: on, ignoreCase: on}))
+  else # 'auto' or anything else
+    newText = (wanakana._romajiToKana(normalizedInputString, {IMEMode: true}))
   unless normalizedInputString is newText
     input.value = newText
     if (typeof input.selectionStart == "number")
@@ -51,6 +60,18 @@ wanakana._onInput = (event) ->
       range = input.createTextRange()
       range.collapse(false)
       range.select()
+
+wanakana._onChange = (e) ->
+  input = e.target
+  if input.dataset.leaveTrailingN != 'yes'
+    s = input.value.trim()
+    if (s[s.length - 1].toLowerCase() == 'n')
+      if input.dataset.wanakanaMode == 'katakana'
+        n = 'ン'
+      else
+        n = 'ん'
+      s = s.substring(0, s.length - 1) + n
+    e.target.value = s
 
 wanakana._extend = (target, source) ->
   if not target?
@@ -169,8 +190,10 @@ wanakana._hiraganaToRomaji = (hira, options) ->
     cursor += chunkSize or 1
   roma.join("")
 
-wanakana._romajiToHiragana = (roma, options) -> wanakana._romajiToKana(roma, options, true)
-wanakana._romajiToKana = (roma, options, ignoreCase = false) ->
+wanakana._romajiToHiragana = (roma, options) ->
+  wanakana._romajiToKana(roma, wanakana._extend({ignoreCase: yes}, options))
+
+wanakana._romajiToKana = (roma, options) ->
   # console.log (new Date().getTime())
   # merge options with default options
   options = wanakana._extend(options, wanakana.defaultOptions)
@@ -223,11 +246,14 @@ wanakana._romajiToKana = (roma, options, ignoreCase = false) ->
         wanakana._isCharConsonant(chunkLC.charAt(0)) and
         chunk.charAt(0) == chunk.charAt(1)
           chunkSize = 1
-          # Return katakana ッ if chunk is uppercase, otherwise return hiragana っ
-          if wanakana._isCharInRange(chunk.charAt(0), wanakana.UPPERCASE_START, wanakana.UPPERCASE_END)
-            chunkLC = chunk = "ッ"
-          else
+          if options.ignoreCase
             chunkLC = chunk = "っ"
+          else
+            # Return katakana ッ if chunk is uppercase, otherwise return hiragana っ
+            if wanakana._isCharInRange(chunk.charAt(0), wanakana.UPPERCASE_START, wanakana.UPPERCASE_END)
+              chunkLC = chunk = "ッ"
+            else
+              chunkLC = chunk = "っ"
 
       kanaChar = wanakana.R_to_J[chunkLC]
       # DEBUG
@@ -261,7 +287,7 @@ wanakana._romajiToKana = (roma, options, ignoreCase = false) ->
         kanaChar = chunk.charAt(0)
 
     # Use katakana if first letter in chunk is uppercase
-    unless ignoreCase
+    unless options.ignoreCase
       if isCharUpperCase(chunk.charAt(0))
         kanaChar = wanakana._hiraganaToKatakana(kanaChar)
 
