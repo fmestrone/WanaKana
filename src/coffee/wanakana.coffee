@@ -23,7 +23,7 @@ wanakana.UPPERCASE_FULLWIDTH_END   = 0xFF3A
 
 wanakana.defaultOptions =
   # Transliterates wi and we to ゐ and ゑ
-  useObseleteKana: no
+  useObsoleteKana: no
   # Special mode for handling input from a text input that is transliterated on the fly.
   IMEMode: off
 
@@ -31,6 +31,9 @@ wanakana.defaultOptions =
  * Automatically sets up an input field to be an IME.
 ###
 wanakana.bind = (input) ->
+  input.autocapitalize = "off"
+  input.autocomplete = "off"
+  input.autocorrect = "off"
   input.addEventListener('change', wanakana._onChange)
   input.addEventListener('input', wanakana._onInput)
 
@@ -277,7 +280,7 @@ wanakana._romajiToKana = (roma, options, ignoreCase = false) ->
       kanaChar = chunk
 
     # Handle special cases.
-    if options?.useObseleteKana
+    if options?.useObsoleteKana
       if chunkLC is "wi" then kanaChar = "ゐ"
       if chunkLC is "we" then kanaChar = "ゑ"
 

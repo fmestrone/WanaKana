@@ -56,7 +56,7 @@ module("Character conversion");
 
 test("Quick Brown Fox", function () {
   // thanks to Yuki http://www.yesjapan.com/YJ6/question/1099/is-there-a-group-of-sentences-that-uses-every-hiragana
-  var opts = { useObseleteKana: true };
+  var opts = { useObsoleteKana: true };
   equal( wanakana.toHiragana("IROHANIHOHETO", opts), "いろはにほへと", "Even the colorful fregrant flowers");
   equal( wanakana.toHiragana("CHIRINURUWO", opts), "ちりぬるを", "Die sooner or later");
   equal( wanakana.toHiragana("WAKAYOTARESO", opts), "わかよたれそ", "Us who live in this world");
@@ -188,22 +188,22 @@ test ("Small kana", function () {
 
 module("Options");
 
-test("useObseleteKana", function () {
-  var opts = {useObseleteKana: true};
-  equal (wanakana.toHiragana('wi', opts), 'ゐ', "wi = ゐ (when useObseleteKana is true)");
+test("useObsoleteKana", function () {
+  var opts = {useObsoleteKana: true};
+  equal (wanakana.toHiragana('wi', opts), 'ゐ', "wi = ゐ (when useObsoleteKana is true)");
   equal (wanakana.toHiragana('we', opts), 'ゑ', "we = ゑ");
   equal (wanakana.toKatakana('wi', opts), 'ヰ', "WI = ヰ");
   equal (wanakana.toKatakana('we', opts), 'ヱ', "WE = ヱ");
 
-  opts.useObseleteKana = false;
-  equal (wanakana.toHiragana('wi', opts), 'うぃ', "wi = うぃ when useObseleteKana is false");
-  equal (wanakana.toHiragana('wi'), 'うぃ', "useObseleteKana is false by default");
-});
+  opts.useObsoleteKana = false;
+  equal (wanakana.toHiragana('wi', opts), 'うぃ', "wi = うぃ when useObsoleteKana is false");
+  equal (wanakana.toHiragana('wi'), 'うぃ', "useObsoleteKana is false by default");
+  equal (wanakana.toHiragana('we'), 'うぇ', "useObsoleteKana is false by default")});
 
 test ("IMEMode", function () {
   var opts;
 
-  /** Simulate real typing by calling the funciton on every character in sequence */
+  /** Simulate real typing by calling the function on every character in sequence */
   function testTyping (str, opts) {
     var pos = 1;
     var l = str.length;
@@ -250,12 +250,12 @@ test("Apostrophes for vague consonant vowel combos", function() {
 });
 
 test("Options use defaultOptions by default", function () {
-  var defaultValue = wanakana.defaultOptions.useObseleteKana;
-  wanakana.defaultOptions.useObseleteKana = true;
+  var defaultValue = wanakana.defaultOptions.useObsoleteKana;
+  wanakana.defaultOptions.useObsoleteKana = true;
   equal (wanakana.toHiragana('wi'), 'ゐ', "Overwrite default (temporarily)");
   var opts = {IMEMode: true};
   equal (wanakana.toHiragana('wi', opts), 'ゐ', "Defaults aren't overwritten by being omitted");
-  wanakana.defaultOptions.useObseleteKana = defaultValue;
+  wanakana.defaultOptions.useObsoleteKana = defaultValue;
 });
 
 module("Performance");

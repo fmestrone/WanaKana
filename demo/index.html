@@ -17,7 +17,12 @@
 				text-align: center;
 			}
 
-			body {
+            h3 {
+                color: #BA4FD0;
+                text-align: center;
+            }
+
+            body {
 				font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 				font-size: 14px;
   				line-height: 20px;
@@ -61,6 +66,7 @@
 				text-decoration: none;
 				font-size: 32px;
 				color: white;
+                text-align: center;
 			}
 
 			.wk-content {
@@ -109,16 +115,39 @@
 
 			<div class="wk-content">
 
-				<h2>Romaji to Kana</h2>
-				<input id="input-translit" autofocus="true" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Type here please" type="text" lang="en">
-				<div class="output" id="output-kana" lang="ja"></div>
+				<h2>IME Mode (auto)</h2>
+                <h3>Text in <em>lower case</em> converts to hiragana.</h3>
+                <h3>Text in <em>UPPER CASE</em> converts to katakana.</h3>
+				<input id="input-IME1" autofocus="true" placeholder="書いてください" type="text" lang="ja">
 
-				<h2>Kana to Romaji</h2>
-				<input id="input-kana" autofocus="true" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Enter kana here" type="text" lang="ja">
-				<div class="output" id="output-romaji" lang="en"></div>
+                <h2>IME Mode (hiragana)</h2>
+                <h3>Regardless of case, text converts to hiragana.</h3>
+                <input id="input-IME2" data-wanakana-mode="hiragana" placeholder="書いてください" type="text" lang="ja">
 
-				<h2>IME Mode</h2>
-				<input id="input-IME" autofocus="true" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="書いてください" type="text" lang="ja">
+                <h2>IME Mode (katakana)</h2>
+                <h3>Regardless of case, text converts to katakana.</h3>
+                <input id="input-IME3" data-wanakana-mode="katakana" placeholder="書いてください" type="text" lang="ja">
+
+                <h2>IME Mode (auto, leave trailing n's)</h2>
+                <h3>Type something that ends with <em>n</em> (for example, <em>konban</em>) then tab out of the input box.</h3>
+                <h3>The <em>n</em> will stay there as is. Now try the same in the other input boxes above: the <em>n</em> is converted to kana!</h3>
+                <input id="input-IME4" data-wanakana-mode="auto" data-leave-trailing-n="yes" autofocus="true" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="書いてください" type="text" lang="ja">
+
+                <p>&nbsp;</p>
+                <hr>
+                <p>&nbsp;</p>
+
+                <h2>API Usage Examples</h2>
+                <p>&nbsp;</p>
+
+                <h3>Romaji to Kana</h3>
+                <input id="input-translit" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Type here please" type="text" lang="en">
+                <div class="output" id="output-kana" lang="ja"></div>
+
+                <h3>Kana to Romaji</h3>
+                <input id="input-kana" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Enter kana here" type="text" lang="ja">
+                <div class="output" id="output-romaji" lang="en"></div>
+
             </div>
 
 		<script type="text/javascript" src="../lib/wanakana.min.js"></script>
@@ -128,9 +157,15 @@
 
 				///// IME Mode
 
-				var inputIME = document.getElementById('input-IME');
+				var inputIME1 = document.getElementById('input-IME1');
+                var inputIME2 = document.getElementById('input-IME2');
+                var inputIME3 = document.getElementById('input-IME3');
+                var inputIME4 = document.getElementById('input-IME4');
 
-				wk.bind(inputIME);
+				wk.bind(inputIME1);
+                wk.bind(inputIME2);
+                wk.bind(inputIME3);
+                wk.bind(inputIME4);
 
 				///// Non-IME mode
 
