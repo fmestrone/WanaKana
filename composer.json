@@ -11,8 +11,12 @@
             "role": "Developer"
         },
         {
+            "name": "James McNamee",
+            "role": "Contributor"
+        },
+        {
             "name": "Federico Mestrone",
-            "role": "Developer"
+            "role": "Contributor"
         }
     ],
     "require-dev": {
