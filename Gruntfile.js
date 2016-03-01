@@ -64,7 +64,7 @@ module.exports = function (grunt) {
 					cwd: '<%=generatedJSPath%>', // Src matches are relative to this path.
 					src: ['**/*.js'], // Actual pattern(s) to match.
 					dest: '<%=deployPath%>/', // Destination path prefix.
-					ext: '.min.js', // Dest filepaths will have this extension.
+					ext: '.min.js' // Dest filepaths will have this extension.
 				}]
 			}
 		},
