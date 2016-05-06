@@ -68,11 +68,17 @@ wanakana._onChange = (e) ->
   input = e.target
   if input.dataset.leaveTrailingN != 'yes'
     s = input.value.trim()
-    if (s[s.length - 1].toLowerCase() == 'n')
+    if (s[s.length - 1] == 'n')
       if input.dataset.wanakanaMode == 'katakana'
         n = 'ン'
       else
         n = 'ん'
+      s = s.substring(0, s.length - 1) + n
+    if (s[s.length - 1] == 'N')
+      if input.dataset.wanakanaMode == 'hiragana'
+        n = 'ん'
+      else
+        n = 'ン'
       s = s.substring(0, s.length - 1) + n
     e.target.value = s
 
@@ -237,7 +243,7 @@ wanakana._romajiToKana = (roma, options, ignoreCase = false) ->
         # Handle edge case of n followed by consonant
 
         if chunkLC.charAt(0) is "n"
-          if options.IMEMode and chunkLC.charAt(1) is "'" and chunkSize is 2
+          if chunkLC.charAt(1) is "'" and chunkSize is 2
             #convert n' to "ん"
             kanaChar = "ん"
             break
