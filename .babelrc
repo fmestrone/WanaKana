@@ -1,0 +1,39 @@
+{
+  "presets": [
+    ["env", {
+      "loose": false,
+      "modules": false,
+      "targets": {
+        "node": 7,
+        "browsers": [
+          "last 2 versions",
+          ">1%"
+        ]
+      }
+    }]
+  ],
+  "env": {
+    "test": {
+      "presets": [[ "env" ]]
+    },
+    "cjs": {
+      "presets": [
+        ["env", {
+          "loose": false,
+          "targets": {
+            "node": 7,
+            "browsers": [
+              "last 2 versions",
+              ">1%"
+            ]
+          }
+        }]
+      ]
+    },
+    "rollup": {
+      "plugins": [
+        "external-helpers"
+      ]
+    }
+  }
+}
